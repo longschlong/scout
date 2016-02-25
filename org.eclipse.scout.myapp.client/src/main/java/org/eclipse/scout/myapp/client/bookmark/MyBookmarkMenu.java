@@ -1,4 +1,4 @@
-package org.eclipse.scout.myapp.client;
+package org.eclipse.scout.myapp.client.bookmark;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,4 +79,5 @@ public class MyBookmarkMenu extends AbstractBookmarkMenu {
 			actionList.add(new MyActivateBookmarkMenu(b));
 		}
 	}
+	
 }

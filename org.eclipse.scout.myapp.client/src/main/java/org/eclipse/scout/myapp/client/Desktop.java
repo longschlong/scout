@@ -2,22 +2,25 @@ package org.eclipse.scout.myapp.client;
 
 import java.util.List;
 
+import org.eclipse.scout.myapp.client.bookmark.MyBookmarkMenu;
 import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm;
 import org.eclipse.scout.myapp.client.helloworld.color.ColorOutline;
 import org.eclipse.scout.myapp.client.search.SearchOutline;
 import org.eclipse.scout.myapp.client.settings.SettingsOutline;
+import org.eclipse.scout.myapp.client.time.TimeForm;
 import org.eclipse.scout.myapp.client.wizard.HelloWorldWizard;
 import org.eclipse.scout.myapp.client.work.WorkOutline;
+import org.eclipse.scout.myapp.shared.time.ITimeService;
 import org.eclipse.scout.rt.client.session.ClientSessionProvider;
 import org.eclipse.scout.rt.client.ui.action.keystroke.AbstractKeyStroke;
 import org.eclipse.scout.rt.client.ui.action.keystroke.IKeyStroke;
 import org.eclipse.scout.rt.client.ui.action.menu.AbstractMenu;
 import org.eclipse.scout.rt.client.ui.desktop.AbstractDesktop;
-import org.eclipse.scout.rt.client.ui.desktop.bookmark.menu.AbstractBookmarkMenu.StartBookmarkMenu;
 import org.eclipse.scout.rt.client.ui.desktop.outline.AbstractOutlineViewButton;
 import org.eclipse.scout.rt.client.ui.desktop.outline.IOutline;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.IPage;
 import org.eclipse.scout.rt.client.ui.form.ScoutInfoForm;
+import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.platform.util.CollectionUtility;
 import org.eclipse.scout.rt.shared.TEXTS;
@@ -42,8 +45,18 @@ public class Desktop extends AbstractDesktop {
 	@Override
 	protected void execGuiAttached() {
 		super.execGuiAttached();
-		//selectFirstVisibleOutline();
-		getMenu(StartBookmarkMenu.ActivateStartBookmarkMenu.class).doAction();	// View bookmark as startup page
+		selectFirstVisibleOutline();
+		//getMenu(StartBookmarkMenu.ActivateStartBookmarkMenu.class).doAction();	// View bookmark as startup page
+//		
+//		addDesktopListener(new DesktopListener() {
+//			
+//			@Override
+//			public void desktopChanged(DesktopEvent e) {
+//				if (e.getNotification().equals(DesktopEvent.TYPE_NOTIFICATION_ADDED)) {
+//					ClientSession.get().getDesktop().setStatusText(e.get);
+//				}
+//			}
+//		});
 	}
 
 	protected void selectFirstVisibleOutline() {
@@ -54,7 +67,7 @@ public class Desktop extends AbstractDesktop {
 			}
 		}
 	}
-
+	
 	@Order(1000)
 	public class FileMenu extends AbstractMenu {
 
@@ -76,6 +89,26 @@ public class Desktop extends AbstractDesktop {
 				// ClientSession.get().getDesktop().setStatus(new Status("Wizard
 				// started.", IStatus.INFO));
 				new HelloWorldWizard().start();
+			}
+		}
+
+		@Order(1000.0)
+		public class StartTimeFormMenu extends AbstractMenu {
+			
+			@Override
+			protected String getConfiguredText() {
+				return "Show time";
+			}
+			
+			@Override
+			protected void execAction() {
+				TimeForm timeForm = new TimeForm();
+				timeForm.start();
+				BEANS.get(ITimeService.class).start();
+				timeForm.waitFor();
+				if (BEANS.get(ITimeService.class).stop()) {
+					timeForm.doCancel();
+				}
 			}
 		}
 
@@ -141,7 +174,7 @@ public class Desktop extends AbstractDesktop {
 			}
 		}
 	}
-
+	
 	@Order(10.0)
 	public class RefreshOutlineKeyStroke extends AbstractKeyStroke {
 
