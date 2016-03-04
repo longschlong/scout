@@ -9,9 +9,11 @@ import org.eclipse.scout.rt.client.services.common.bookmark.IBookmarkService;
 import org.eclipse.scout.rt.client.ui.action.menu.IMenu;
 import org.eclipse.scout.rt.client.ui.action.menu.MenuSeparator;
 import org.eclipse.scout.rt.client.ui.desktop.IDesktop;
+import org.eclipse.scout.rt.client.ui.desktop.bookmark.internal.ManageBookmarksForm;
 import org.eclipse.scout.rt.client.ui.desktop.bookmark.menu.AbstractBookmarkMenu;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
+import org.eclipse.scout.rt.platform.Replace;
 import org.eclipse.scout.rt.platform.annotations.ConfigOperation;
 import org.eclipse.scout.rt.shared.services.common.bookmark.Bookmark;
 import org.eclipse.scout.rt.shared.services.common.bookmark.BookmarkFolder;
@@ -44,7 +46,7 @@ public class MyBookmarkMenu extends AbstractBookmarkMenu {
 				newList.add(m);
 			} else if (m.getClass() == AddGlobalBookmarkMenu.class) {
 				newList.add(m);
-			} else if (m.getClass() == ManageBookmarksMenu.class) {
+			} else if (m.getClass() == MyManageBookmarksMenu.class) {
 				newList.add(m);
 			} else if (m.getClass() == StartBookmarkMenu.class) {
 				newList.add(m);
@@ -80,4 +82,17 @@ public class MyBookmarkMenu extends AbstractBookmarkMenu {
 		}
 	}
 	
+	@Replace
+	@Order(3)
+	public class MyManageBookmarksMenu extends ManageBookmarksMenu {
+
+		@Override
+		protected void execAction() {
+			ManageBookmarksForm form = new ManageBookmarksForm();
+			form.getGlobalBookmarkTreeField().injectPublishBookmarkCommand(new PublishGlobalToUserBookmarkCommand(form));
+			form.getUserBookmarkTreeField().injectPublishBookmarkCommand(new PublishUserToGlobalBookmarkCommand(form));
+			form.startModify();
+		}
+	}
+
 }
