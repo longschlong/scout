@@ -13,7 +13,7 @@ import org.eclipse.scout.rt.shared.notification.INotificationHandler;
 /**
  * <h3>{@link TimeNotificationHandler}</h3>
  *
- * @author jgu
+ * @author mlu
  */
 public class TimeNotificationHandler implements INotificationHandler<Date> {
 
