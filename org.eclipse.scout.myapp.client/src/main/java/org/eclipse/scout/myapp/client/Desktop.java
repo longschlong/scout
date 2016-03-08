@@ -46,17 +46,7 @@ public class Desktop extends AbstractDesktop {
 	protected void execGuiAttached() {
 		super.execGuiAttached();
 		selectFirstVisibleOutline();
-		//getMenu(StartBookmarkMenu.ActivateStartBookmarkMenu.class).doAction();	// View bookmark as startup page
-//		
-//		addDesktopListener(new DesktopListener() {
-//			
-//			@Override
-//			public void desktopChanged(DesktopEvent e) {
-//				if (e.getNotification().equals(DesktopEvent.TYPE_NOTIFICATION_ADDED)) {
-//					ClientSession.get().getDesktop().setStatusText(e.get);
-//				}
-//			}
-//		});
+		//getMenu(StartBookmarkMenu.ActivateStartBookmarkMenu.class).doAction();	// XXX View bookmark as startup page
 	}
 
 	protected void selectFirstVisibleOutline() {
@@ -86,8 +76,6 @@ public class Desktop extends AbstractDesktop {
 
 			@Override
 			protected void execAction() {
-				// ClientSession.get().getDesktop().setStatus(new Status("Wizard
-				// started.", IStatus.INFO));
 				new HelloWorldWizard().start();
 			}
 		}
@@ -136,8 +124,6 @@ public class Desktop extends AbstractDesktop {
 
 			@Override
 			protected void execAction() {
-				// ClientSession.get().getDesktop().setStatus(new Status("Wizard
-				// started.", IStatus.INFO));
 				new HelloWorldForm().startNew();
 			}
 		}

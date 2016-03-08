@@ -19,7 +19,6 @@ public class AccessControlService extends UserIdAccessControlService {
     Permissions permissions = new Permissions();
     permissions.add(new RemoteServiceAccessPermission("*.shared.*", "*"));
 
-    //TODO [mlu]: Fill access control service
     permissions.add(new AllPermission());
     return permissions;
   }
