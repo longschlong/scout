@@ -7,6 +7,7 @@ import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm;
 import org.eclipse.scout.myapp.client.helloworld.color.ColorOutline;
 import org.eclipse.scout.myapp.client.search.SearchOutline;
 import org.eclipse.scout.myapp.client.settings.SettingsOutline;
+import org.eclipse.scout.myapp.client.test.TestForm;
 import org.eclipse.scout.myapp.client.time.TimeForm;
 import org.eclipse.scout.myapp.client.wizard.HelloWorldWizard;
 import org.eclipse.scout.myapp.client.work.WorkOutline;
@@ -100,6 +101,34 @@ public class Desktop extends AbstractDesktop {
 			}
 		}
 
+		@Order(1100.0)
+		public class StartHelloWorldForm extends AbstractMenu {
+
+			@Override
+			protected String getConfiguredText() {
+				return "Start HelloWorldForm";
+			}
+
+			@Override
+			protected void execAction() {
+				new HelloWorldForm().startNew();
+			}
+		}
+		
+		@Order(1200.0)
+		public class StartTestForm extends AbstractMenu {
+
+			@Override
+			protected String getConfiguredText() {
+				return "Start TestForm";
+			}
+
+			@Override
+			protected void execAction() {
+				new TestForm().start();
+			}
+		}
+
 		@Order(2000.0)
 		public class ExitMenu extends AbstractMenu {
 
@@ -111,20 +140,6 @@ public class Desktop extends AbstractDesktop {
 			@Override
 			protected void execAction() {
 				ClientSessionProvider.currentSession(ClientSession.class).stop();
-			}
-		}
-
-		@Order(1000.0)
-		public class StartHelloWorldForm extends AbstractMenu {
-
-			@Override
-			protected String getConfiguredText() {
-				return "Start HelloWorldForm";
-			}
-
-			@Override
-			protected void execAction() {
-				new HelloWorldForm().startNew();
 			}
 		}
 
