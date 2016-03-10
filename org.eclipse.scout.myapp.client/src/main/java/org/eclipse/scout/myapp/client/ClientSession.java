@@ -29,12 +29,11 @@ public class ClientSession extends AbstractClientSession {
 
   @Override
   protected void execLoadSession() {
+	setLocale(Locale.ENGLISH);
     //pre-load all known code types
     CODES.getAllCodeTypes("org.eclipse.scout.myapp.shared");
 
     setDesktop(new Desktop());
     BEANS.get(IBookmarkService.class).loadBookmarks();
-    
-    setLocale(Locale.ENGLISH);
   }
 }

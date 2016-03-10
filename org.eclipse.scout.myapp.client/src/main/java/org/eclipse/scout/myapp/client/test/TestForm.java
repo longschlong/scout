@@ -206,6 +206,18 @@ public class TestForm extends AbstractForm {
 		return new AbstractDateTimeField() {
 			
 			@Override
+			protected void execInitField() {
+				super.execInitField();
+//				addPropertyChangeListener(PROP_TOOLTIP_TEXT, new PropertyChangeListener() {
+//					
+//					@Override
+//					public void propertyChange(PropertyChangeEvent evt) {
+//						System.out.println(evt);
+//					}
+//				});
+			}
+			
+			@Override
 			protected String getConfiguredLabel() {
 				return label;
 			}

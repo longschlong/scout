@@ -17,7 +17,7 @@ import org.quartz.SimpleScheduleBuilder;
 @ApplicationScoped
 public class TimeService implements ITimeService {
 
-	private static final UpdateJob m_updateJob = new UpdateJob();
+	private final UpdateJob m_updateJob = new UpdateJob();
 	
 	public void start() {
 		Jobs.schedule(
@@ -26,7 +26,22 @@ public class TimeService implements ITimeService {
 						.withStartIn(0, TimeUnit.SECONDS).withSchedule(SimpleScheduleBuilder.repeatSecondlyForever()))
 				);
 		
-		BEANS.get(ClientNotificationRegistry.class).putForAllSessions(new TimeJobInfoMessage("Time client notification (job) started"));
+		/*
+		// Define start instructions
+		ExecutionTrigger executionTrigger = Jobs.newExecutionTrigger();	// Trigger, that defines the start
+		executionTrigger = executionTrigger.withStartIn(0L, TimeUnit.SECONDS); // Start immediately
+		executionTrigger.withSchedule(SimpleScheduleBuilder.repeatSecondlyForever()); // Run every minute
+		
+		// Add start instructions to execution instructions
+		JobInput jobInput = Jobs.newInput(); // job input, to add execution instructions
+		jobInput = jobInput.withName("Timer");	// Name of the job
+		jobInput = jobInput.withExecutionTrigger(executionTrigger); // Add execution trigger
+		Jobs.schedule(m_updateJob, jobInput);	// Schedule job
+		*/
+		
+		// Show info bubble if possible (out of the box only in table pages)
+		//BEANS.get(ClientNotificationRegistry.class).putForAllSessions(new TimeJobInfoMessage("Time client notification (job) started"));
+		BEANS.get(ClientNotificationRegistry.class).putForUser("mlu", new TimeJobInfoMessage("Time client notification (job) started"));
 	}
 
 	@Override
@@ -38,7 +53,9 @@ public class TimeService implements ITimeService {
 			}
 		}, true);
 		
-		BEANS.get(ClientNotificationRegistry.class).putForAllSessions(new TimeJobInfoMessage("Time client notification (job) stopped"));
+		// Show info bubble if possible (out of the box only in table pages)
+		// BEANS.get(ClientNotificationRegistry.class).putForAllSessions(new TimeJobInfoMessage("Time client notification (job) stopped"));
+		BEANS.get(ClientNotificationRegistry.class).putForUser("mlu", new TimeJobInfoMessage("Time client notification (job) stopped"));
 		return cancel;
 	}
 

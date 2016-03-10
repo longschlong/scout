@@ -22,11 +22,6 @@ public class ColorsNodePage extends AbstractPageWithNodes {
 	}
 
 	@Override
-	protected boolean getConfiguredTableVisible() {
-		return false;
-	}
-
-	@Override
 	protected String getConfiguredTitle() {
 		return TEXTS.get("Colors");
 	}

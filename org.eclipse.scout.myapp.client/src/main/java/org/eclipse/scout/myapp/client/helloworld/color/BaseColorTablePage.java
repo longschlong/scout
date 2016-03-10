@@ -66,6 +66,11 @@ public class BaseColorTablePage extends AbstractPageWithTable<BaseColorTablePage
 		importPageData(BEANS.get(IColorPageService.class).loadSubColors((ColorSearchFormData) getSearchFilter().getFormData()));
 	}
 	
+	@Override
+	protected boolean getConfiguredSearchRequired() {
+		return false;	// XXX Search required
+	}
+	
 	@Order(10)
 	public class Table extends AbstractTable {
 

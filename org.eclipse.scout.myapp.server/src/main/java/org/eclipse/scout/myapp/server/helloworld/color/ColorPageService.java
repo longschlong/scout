@@ -11,9 +11,11 @@ import org.eclipse.scout.myapp.shared.helloworld.color.ColorCodeType.IColorCode;
 import org.eclipse.scout.myapp.shared.helloworld.color.ColorSearchFormData;
 import org.eclipse.scout.myapp.shared.helloworld.color.IColorPageService;
 import org.eclipse.scout.myapp.shared.helloworld.color.OperatorCodeType;
+import org.eclipse.scout.myapp.shared.helloworld.color.TableFetchInfoMessage;
 import org.eclipse.scout.myapp.shared.helloworld.color.OperatorCodeType.AbstractOperatorCode;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.util.StringUtility;
+import org.eclipse.scout.rt.server.clientnotification.ClientNotificationRegistry;
 
 /**
  * <h3>{@link ColorPageService}</h3>
@@ -46,11 +48,16 @@ public class ColorPageService implements IColorPageService {
 
 		mixColorRow(pageData, formData);
 		
+		if (pageData.getRows().length > 200) {
+			// XXX
+			//BEANS.get(ClientNotificationRegistry.class).putForUser("mlu", new TableFetchInfoMessage("More than " + 200 + " rows loaded."));
+		}
+		
 		return pageData;
 	}
 	
 	protected void mixColorRow(BaseColorTablePageData pageData, ColorSearchFormData formData) {
-		for (int i = 0; i < 255; i++) {
+		for (int i = 0; i <= 255; i++) {
 			Color colorValue = formData.getColor().getValue();
 			AbstractColorCode code = BEANS.get(ColorCodeType.class).getCode(colorValue);
 			if (code instanceof IColorCode) {

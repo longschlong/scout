@@ -3,6 +3,7 @@ package org.eclipse.scout.myapp.client.bookmark;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.scout.myapp.shared.Icons;
 import org.eclipse.scout.rt.client.services.common.bookmark.BookmarkServiceEvent;
 import org.eclipse.scout.rt.client.services.common.bookmark.BookmarkServiceListener;
 import org.eclipse.scout.rt.client.services.common.bookmark.IBookmarkService;
@@ -23,7 +24,12 @@ public class MyBookmarkMenu extends AbstractBookmarkMenu {
 	public MyBookmarkMenu(IDesktop desktop) {
 		super(desktop);
 	}
-
+	
+	@Override
+	protected String getConfiguredIconId() {
+		return Icons.Star;
+	}
+	
 	@Override
 	@ConfigOperation
 	@Order(10)
@@ -76,6 +82,7 @@ public class MyBookmarkMenu extends AbstractBookmarkMenu {
 			addBookmarkTreeInternal(f, childActionList);
 			group.setChildActions(childActionList);
 			actionList.add(group);
+			actionList.add(new MenuSeparator());
 		}
 		for (Bookmark b : folder.getBookmarks()) {
 			actionList.add(new MyActivateBookmarkMenu(b));

@@ -17,35 +17,35 @@ import org.eclipse.scout.rt.shared.notification.INotificationHandler;
  */
 public class TimeNotificationHandler implements INotificationHandler<Date> {
 
-  @Override
-  public void handleNotification(final Date notification) {
-    ModelJobs.schedule(new Callable<Date>() {
+	@Override
+	public void handleNotification(final Date notification) {
+		ModelJobs.schedule(new Callable<Date>() {
 
-		@Override
-		public Date call() throws Exception {
-			updateForm(notification);
-			return notification;
+			@Override
+			public Date call() throws Exception {
+				updateForm(notification);
+				return notification;
+			}
+
+		}, ModelJobs.newInput(ClientRunContexts.copyCurrent()));
+	}
+
+	private void updateForm(Date notification) {
+		TimeForm f = findOrCreateForm();
+		if (f != null) {
+			f.getTimeField().setValue(DateUtility.format(notification, "YYYY-MM-dd HH:mm:ss"));
 		}
-		
-	}, ModelJobs.newInput(ClientRunContexts.copyCurrent()));
-  }
+	}
 
-  private void updateForm(Date notification) {
-    TimeForm f = findOrCreateForm();
-    if (f != null) {
-      f.getTimeField().setValue(DateUtility.format(notification, "YYYY-MM-dd HH:mm:ss"));
-    }
-  }
-
-  private TimeForm findOrCreateForm() {
-    IDesktop desktop = ClientSession.get().getDesktop();
-    if (desktop != null && desktop.isOpened()) {
-    	TimeForm form = desktop.findForm(TimeForm.class);
-      if (form != null) {
-        return form;
-      }
-    }
-    return null;
-  }
+	private TimeForm findOrCreateForm() {
+		IDesktop desktop = ClientSession.get().getDesktop();
+		if (desktop != null && desktop.isOpened()) {
+			TimeForm form = desktop.findForm(TimeForm.class);
+			if (form != null) {
+				return form;
+			}
+		}
+		return null;
+	}
 
 }
