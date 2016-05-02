@@ -2,6 +2,7 @@ package org.eclipse.scout.myapp.client;
 
 import java.util.Locale;
 
+import org.eclipse.scout.myapp.client.cluster.ClusterMessageNotificationHandler;
 import org.eclipse.scout.rt.client.AbstractClientSession;
 import org.eclipse.scout.rt.client.IClientSession;
 import org.eclipse.scout.rt.client.services.common.bookmark.IBookmarkService;
@@ -35,5 +36,8 @@ public class ClientSession extends AbstractClientSession {
 
     setDesktop(new Desktop());
     BEANS.get(IBookmarkService.class).loadBookmarks();
+    BEANS.get(ClusterMessageNotificationHandler.class).putSessionContext(this);
   }
+  
+  
 }

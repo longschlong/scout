@@ -11,11 +11,9 @@ import org.eclipse.scout.myapp.shared.helloworld.color.ColorCodeType.IColorCode;
 import org.eclipse.scout.myapp.shared.helloworld.color.ColorSearchFormData;
 import org.eclipse.scout.myapp.shared.helloworld.color.IColorPageService;
 import org.eclipse.scout.myapp.shared.helloworld.color.OperatorCodeType;
-import org.eclipse.scout.myapp.shared.helloworld.color.TableFetchInfoMessage;
 import org.eclipse.scout.myapp.shared.helloworld.color.OperatorCodeType.AbstractOperatorCode;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.util.StringUtility;
-import org.eclipse.scout.rt.server.clientnotification.ClientNotificationRegistry;
 
 /**
  * <h3>{@link ColorPageService}</h3>

@@ -32,6 +32,7 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
     </dependency>
+    <!-- Cluster sync -->
      <dependency>
       <groupId>org.eclipse.scout.rt</groupId>
       <artifactId>org.eclipse.scout.rt.server.jms</artifactId>
@@ -40,6 +41,11 @@
       <groupId>javax.jms</groupId>
       <artifactId>jms-api</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-broker</artifactId>
+      <version>5.12.1</version>
     </dependency>
   </dependencies>
 </project>

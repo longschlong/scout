@@ -3,6 +3,7 @@ package org.eclipse.scout.myapp.client;
 import java.util.List;
 
 import org.eclipse.scout.myapp.client.bookmark.MyBookmarkMenu;
+import org.eclipse.scout.myapp.client.cluster.ConversationForm;
 import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm;
 import org.eclipse.scout.myapp.client.helloworld.color.ColorOutline;
 import org.eclipse.scout.myapp.client.search.SearchOutline;
@@ -11,6 +12,8 @@ import org.eclipse.scout.myapp.client.test.TestForm;
 import org.eclipse.scout.myapp.client.time.TimeForm;
 import org.eclipse.scout.myapp.client.wizard.HelloWorldWizard;
 import org.eclipse.scout.myapp.client.work.WorkOutline;
+import org.eclipse.scout.myapp.shared.cluster.ClusterMessage;
+import org.eclipse.scout.myapp.shared.cluster.IClusterMessageService;
 import org.eclipse.scout.myapp.shared.time.ITimeService;
 import org.eclipse.scout.rt.client.session.ClientSessionProvider;
 import org.eclipse.scout.rt.client.ui.action.keystroke.AbstractKeyStroke;
@@ -126,6 +129,20 @@ public class Desktop extends AbstractDesktop {
 			@Override
 			protected void execAction() {
 				new TestForm().start();
+			}
+		}
+		
+		@Order(1300)
+		public class StartConversationMenu extends AbstractMenu {
+
+			@Override
+			protected String getConfiguredText() {
+				return "Start conversation";
+			}
+			
+			@Override
+			protected void execAction() {
+				new ConversationForm().start();
 			}
 		}
 
