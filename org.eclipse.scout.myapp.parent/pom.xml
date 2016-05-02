@@ -20,7 +20,7 @@
   <properties>
     <org.eclipse.scout.myapp.version>${project.version}</org.eclipse.scout.myapp.version>
     <jdk.source.version>1.8</jdk.source.version>
-    <org.eclipse.scout.rt_version>5.2.0.M5</org.eclipse.scout.rt_version>
+    <org.eclipse.scout.rt_version>6.0.0.M6</org.eclipse.scout.rt_version>
   </properties>
 
   <modules>

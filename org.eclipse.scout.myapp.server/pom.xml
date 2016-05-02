@@ -32,5 +32,14 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
     </dependency>
+     <dependency>
+      <groupId>org.eclipse.scout.rt</groupId>
+      <artifactId>org.eclipse.scout.rt.server.jms</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.jms</groupId>
+      <artifactId>jms-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 </project>
