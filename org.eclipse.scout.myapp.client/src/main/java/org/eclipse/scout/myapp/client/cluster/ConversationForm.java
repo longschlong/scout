@@ -1,22 +1,26 @@
 package org.eclipse.scout.myapp.client.cluster;
 
+import org.eclipse.scout.myapp.client.cluster.ConversationForm.MainBox.TopBox;
 import org.eclipse.scout.myapp.client.cluster.ConversationForm.MainBox.TopBox.ConversationField;
 import org.eclipse.scout.myapp.client.cluster.ConversationForm.MainBox.TopBox.MessageBox;
-import org.eclipse.scout.myapp.client.cluster.ConversationForm.MainBox.TopBox.MessageBox.MessageField;
-import org.eclipse.scout.myapp.client.cluster.ConversationForm.MainBox.TopBox.MessageBox.SendButton;
+import org.eclipse.scout.myapp.client.cluster.ConversationForm.MainBox.TopBox.MessageBox.ButtonBox;
+import org.eclipse.scout.myapp.client.cluster.ConversationForm.MainBox.TopBox.MessageBox.ButtonBox.MessageField;
+import org.eclipse.scout.myapp.client.cluster.ConversationForm.MainBox.TopBox.MessageBox.ButtonBox.SendButton;
 import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm;
-import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm.MainBox.TopBox;
 import org.eclipse.scout.myapp.shared.cluster.ClusterMessage;
-import org.eclipse.scout.myapp.shared.cluster.IClusterMessageService;
+import org.eclipse.scout.myapp.shared.cluster.IClusterMessageDistributionService;
 import org.eclipse.scout.rt.client.session.ClientSessionProvider;
+import org.eclipse.scout.rt.client.ui.action.keystroke.KeyStroke;
 import org.eclipse.scout.rt.client.ui.form.AbstractForm;
 import org.eclipse.scout.rt.client.ui.form.AbstractFormHandler;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
+import org.eclipse.scout.rt.client.ui.form.fields.sequencebox.AbstractSequenceBox;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
+import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.shared.AbstractIcons;
 
 /**
@@ -64,6 +68,10 @@ public class ConversationForm extends AbstractForm {
 		return getFieldByClass(MessageBox.class);
 	}
 
+	public ButtonBox getButtonBox() {
+		return getFieldByClass(ButtonBox.class);
+	}
+
 	public SendButton getSendButton() {
 		return getFieldByClass(SendButton.class);
 	}
@@ -75,7 +83,7 @@ public class ConversationForm extends AbstractForm {
 	public ConversationField getConversationField() {
 		return getFieldByClass(ConversationField.class);
 	}
-	
+
 	public MessageField getMessageField() {
 		return getFieldByClass(MessageField.class);
 	}
@@ -162,6 +170,24 @@ public class ConversationForm extends AbstractForm {
 				protected boolean getConfiguredBorderVisible() {
 					return false;
 				}
+
+				@Order(1000)
+				public class ButtonBox extends AbstractSequenceBox {
+					
+					@Override
+					protected boolean getConfiguredLabelVisible() {
+						return false;
+					}
+					
+					@Override
+					protected String getConfiguredLabel() {
+						return "Buttons";
+					}
+
+					@Override
+					protected boolean getConfiguredAutoCheckFromTo() {
+						return false;
+					}
 				
 				@Order(2000.0)
 				public class MessageField extends AbstractStringField {
@@ -190,17 +216,11 @@ public class ConversationForm extends AbstractForm {
 					@Override
 					protected void execChangedValue() {
 						super.execChangedValue();
-//						if (StringUtility.hasText(getValue())) {
-//							getSendButton().setEnabled(true);
-//						}
-//						else {
-//							getSendButton().setEnabled(false);
-//						}
 					}
 					
 					@Override
 					protected boolean getConfiguredMultilineText() {
-						return true;
+						return false;
 					}
 				}
 
@@ -213,7 +233,38 @@ public class ConversationForm extends AbstractForm {
 
 					@Override
 					protected void execClickAction() {
-						BEANS.get(IClusterMessageService.class).sendMessage(new ClusterMessage(ClientSessionProvider.currentSession().getUserId() + ": " + getMessageField().getValue()));
+						if (StringUtility.hasText(getMessageField().getValue())) {
+							BEANS.get(IClusterMessageDistributionService.class).sendMessage(new ClusterMessage(ClientSessionProvider.currentSession().getUserId() + ": " + getMessageField().getValue()));
+							getMessageField().setValue(null);
+						}
+					}
+					
+					@Override
+					protected boolean getConfiguredProcessButton() {
+						return false;
+					}
+					
+					@Override
+					protected boolean getConfiguredGridUseUiWidth() {
+						return true;
+					}
+					
+					@Override
+					protected String getConfiguredKeyStroke() {
+						return KeyStroke.ENTER;
+					}
+				}
+				
+				@Order(4000.0)
+				public class ResetButton extends AbstractButton {
+					@Override
+					protected String getConfiguredLabel() {
+						return "Reset";
+					}
+					
+					@Override
+					protected void execClickAction() {
+						BEANS.get(IClusterMessageDistributionService.class).clear();
 						getMessageField().setValue(null);
 					}
 					
@@ -227,13 +278,21 @@ public class ConversationForm extends AbstractForm {
 						return true;
 					}
 				}
-				
+
+					}
+					
 				
 			}
 
 		}
 
 		public class OkButton extends AbstractOkButton {
+			
+			  @Override
+			  protected String getConfiguredKeyStroke() {
+			    return null;
+			  }
+			
 		}
 	}
 	

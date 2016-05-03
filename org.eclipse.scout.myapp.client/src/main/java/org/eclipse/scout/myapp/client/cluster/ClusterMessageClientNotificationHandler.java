@@ -5,20 +5,18 @@ import java.util.concurrent.Callable;
 import org.eclipse.scout.myapp.client.ClientSession;
 import org.eclipse.scout.myapp.shared.cluster.ClusterMessage;
 import org.eclipse.scout.rt.client.IClientSession;
-import org.eclipse.scout.rt.client.context.ClientRunContext;
 import org.eclipse.scout.rt.client.context.ClientRunContexts;
 import org.eclipse.scout.rt.client.job.ModelJobs;
 import org.eclipse.scout.rt.client.ui.desktop.IDesktop;
-import org.eclipse.scout.rt.platform.job.JobInput;
 import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.shared.notification.INotificationHandler;
 
 /**
- * <h3>{@link ClusterMessageNotificationHandler}</h3>
+ * <h3>{@link ClusterMessageClientNotificationHandler}</h3>
  *
  * @author mlu
  */
-public class ClusterMessageNotificationHandler implements INotificationHandler<ClusterMessage> {
+public class ClusterMessageClientNotificationHandler implements INotificationHandler<ClusterMessage> {
 
 	private IClientSession session;
 	
@@ -28,12 +26,6 @@ public class ClusterMessageNotificationHandler implements INotificationHandler<C
 	
 	@Override
 	public void handleNotification(final ClusterMessage notification) {
-		System.out.println(notification.getStatus().getMessage());
-		ClientRunContext copyCurrent = ClientRunContexts.copyCurrent();
-		if (copyCurrent.getSession() == null) {
-			copyCurrent.withSession(session, true);
-		}
-		JobInput newInput = ModelJobs.newInput(copyCurrent);
 		//System.out.println(notification.getStatus().getMessage());
 		ModelJobs.schedule(new Callable<ClusterMessage>() {
 
@@ -43,7 +35,7 @@ public class ClusterMessageNotificationHandler implements INotificationHandler<C
 				return notification;
 			}
 
-		}, newInput);
+		}, ModelJobs.newInput(ClientRunContexts.copyCurrent().withSession(session, true)));
 	}
 
 	private void updateForm(ClusterMessage notification) {
@@ -52,11 +44,16 @@ public class ClusterMessageNotificationHandler implements INotificationHandler<C
 		}
 		ConversationForm f = findOrCreateForm();
 		if (f != null) {
-			String currentValue = StringUtility.nvl(f.getConversationField().getValue(), "");
-			StringBuffer b = new StringBuffer(currentValue);
-			b.append(notification.getStatus().getMessage());
-			b.append("\r\n");
-			f.getConversationField().setValue(b.toString());
+			if (notification.isClearMessage()) {
+				f.getConversationField().setValue(null);
+			}
+			else {
+				String currentValue = StringUtility.nvl(f.getConversationField().getValue(), "");
+				StringBuffer b = new StringBuffer(currentValue);
+				b.append(notification.getStatus().getMessage());
+				b.append("\r\n");
+				f.getConversationField().setValue(b.toString());
+			}
 		}
 	}
 

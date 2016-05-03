@@ -16,6 +16,8 @@ import org.eclipse.scout.rt.platform.util.concurrent.IRunnable;
 import org.eclipse.scout.rt.server.IServerSession;
 import org.eclipse.scout.rt.server.context.ServerRunContext;
 import org.eclipse.scout.rt.server.context.ServerRunContexts;
+import org.eclipse.scout.rt.server.services.common.clustersync.IClusterNotificationListener;
+import org.eclipse.scout.rt.server.services.common.clustersync.IClusterNotificationMessage;
 import org.eclipse.scout.rt.server.services.common.clustersync.IClusterSynchronizationService;
 import org.eclipse.scout.rt.server.session.ServerSessionProvider;
 import org.eclipse.scout.rt.shared.ui.UserAgent;
@@ -35,18 +37,21 @@ public class ServerApplication implements IPlatformListener {
 	}
 
 	protected void initClusterSync() {
-		final Subject subject = new Subject();
-		subject.getPrincipals().add(new SimplePrincipal("systen"));
-		subject.setReadOnly();
-		m_subject.set(subject);
-
-		createSuperUserContext().run(new IRunnable() {
-			@Override
-			public void run() throws Exception {
-				IClusterSynchronizationService clusterSyncService = BEANS.get(IClusterSynchronizationService.class);
-				clusterSyncService.enable();
-			}
-		});
+		IClusterSynchronizationService clusterSyncService = BEANS.get(IClusterSynchronizationService.class);
+		clusterSyncService.enable();
+		
+//		final Subject subject = new Subject();
+//		subject.getPrincipals().add(new SimplePrincipal("systen"));
+//		subject.setReadOnly();
+//		m_subject.set(subject);
+//
+//		createSuperUserContext().run(new IRunnable() {
+//			@Override
+//			public void run() throws Exception {
+//				IClusterSynchronizationService clusterSyncService = BEANS.get(IClusterSynchronizationService.class);
+//				clusterSyncService.enable();
+//			}
+//		});
 	}
 
 	@SuppressWarnings("deprecation")

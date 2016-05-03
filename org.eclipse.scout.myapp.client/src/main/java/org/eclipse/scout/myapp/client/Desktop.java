@@ -13,7 +13,7 @@ import org.eclipse.scout.myapp.client.time.TimeForm;
 import org.eclipse.scout.myapp.client.wizard.HelloWorldWizard;
 import org.eclipse.scout.myapp.client.work.WorkOutline;
 import org.eclipse.scout.myapp.shared.cluster.ClusterMessage;
-import org.eclipse.scout.myapp.shared.cluster.IClusterMessageService;
+import org.eclipse.scout.myapp.shared.cluster.IClusterMessageDistributionService;
 import org.eclipse.scout.myapp.shared.time.ITimeService;
 import org.eclipse.scout.rt.client.session.ClientSessionProvider;
 import org.eclipse.scout.rt.client.ui.action.keystroke.AbstractKeyStroke;
