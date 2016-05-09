@@ -91,6 +91,11 @@ public class ConversationForm extends AbstractForm {
 	@Order(1000.0)
 	public class MainBox extends AbstractGroupBox {
 
+		@Override
+		protected int getConfiguredHeightInPixel() {
+			return 500;
+		}
+
 		@Order(1000.0)
 		public class TopBox extends AbstractGroupBox {
 
@@ -98,7 +103,7 @@ public class ConversationForm extends AbstractForm {
 			protected String getConfiguredLabel() {
 				return "Conversation";
 			}
-			
+
 			@Override
 			protected boolean getConfiguredLabelVisible() {
 				return true;
@@ -116,42 +121,42 @@ public class ConversationForm extends AbstractForm {
 				protected boolean getConfiguredEnabled() {
 					return false;
 				}
-				
+
 				@Override
 				protected boolean getConfiguredLabelVisible() {
 					return false;
 				}
-				
+
 				@Override
 				protected int getConfiguredGridW() {
 					return 2;
 				}
-				
+
 				@Override
 				protected double getConfiguredGridWeightY() {
 					return 1.0;
 				}
-				
+
 				@Override
 				protected boolean getConfiguredHtmlEnabled() {
 					return true;
 				}
-				
+
 				@Override
 				protected int getConfiguredGridH() {
-					return 2;
+					return 4;
 				}
-				
+
 				@Override
 				protected boolean getConfiguredMultilineText() {
 					return true;
 				}
-				
+
 				@Override
 				protected boolean getConfiguredWrapText() {
 					return true;
 				}
-				
+
 				@Override
 				protected boolean getConfiguredTrimText() {
 					return false;
@@ -160,12 +165,12 @@ public class ConversationForm extends AbstractForm {
 
 			@Order(1500.0)
 			public class MessageBox extends AbstractGroupBox {
-				
+
 				@Override
 				protected boolean getConfiguredLabelVisible() {
 					return false;
 				}
-				
+
 				@Override
 				protected boolean getConfiguredBorderVisible() {
 					return false;
@@ -173,12 +178,12 @@ public class ConversationForm extends AbstractForm {
 
 				@Order(1000)
 				public class ButtonBox extends AbstractSequenceBox {
-					
+
 					@Override
 					protected boolean getConfiguredLabelVisible() {
 						return false;
 					}
-					
+
 					@Override
 					protected String getConfiguredLabel() {
 						return "Buttons";
@@ -188,114 +193,118 @@ public class ConversationForm extends AbstractForm {
 					protected boolean getConfiguredAutoCheckFromTo() {
 						return false;
 					}
-				
-				@Order(2000.0)
-				public class MessageField extends AbstractStringField {
 
-					@Override
-					protected String getConfiguredLabel() {
-						return "Message: ";
-					}
+					@Order(2000.0)
+					public class MessageField extends AbstractStringField {
 
-					@Override
-					protected boolean getConfiguredLabelVisible() {
-						return false;
-					}
-					
-					@Override
-					protected int getConfiguredMaxLength() {
-						return 60;
-					}
-					
+						@Override
+						protected String getConfiguredLabel() {
+							return "Message: ";
+						}
 
-					@Override
-					protected boolean getConfiguredTrimText() {
-						return false;
-					}
-					
-					@Override
-					protected void execChangedValue() {
-						super.execChangedValue();
-					}
-					
-					@Override
-					protected boolean getConfiguredMultilineText() {
-						return false;
-					}
-				}
+						@Override
+						protected boolean getConfiguredLabelVisible() {
+							return false;
+						}
 
-				@Order(3000.0)
-				public class SendButton extends AbstractButton {
-					@Override
-					protected String getConfiguredLabel() {
-						return "Send";
-					}
+						@Override
+						protected int getConfiguredMaxLength() {
+							return 60;
+						}
 
-					@Override
-					protected void execClickAction() {
-						if (StringUtility.hasText(getMessageField().getValue())) {
-							BEANS.get(IClusterMessageDistributionService.class).sendMessage(new ClusterMessage(ClientSessionProvider.currentSession().getUserId() + ": " + getMessageField().getValue()));
-							getMessageField().setValue(null);
+						@Override
+						protected boolean getConfiguredTrimText() {
+							return false;
+						}
+
+						@Override
+						protected void execChangedValue() {
+							super.execChangedValue();
+						}
+
+						@Override
+						protected boolean getConfiguredMultilineText() {
+							return false;
 						}
 					}
-					
-					@Override
-					protected boolean getConfiguredProcessButton() {
-						return false;
+
+					@Order(3000.0)
+					public class SendButton extends AbstractButton {
+						@Override
+						protected String getConfiguredLabel() {
+							return "Send";
+						}
+
+						@Override
+						protected void execClickAction() {
+							if (StringUtility.hasText(getMessageField().getValue())) {
+								BEANS.get(IClusterMessageDistributionService.class).sendMessage(
+										new ClusterMessage(ClientSessionProvider.currentSession().getUserId() + ": "
+												+ getMessageField().getValue()));
+								getMessageField().setValue(null);
+							}
+						}
+
+						@Override
+						protected boolean getConfiguredProcessButton() {
+							return false;
+						}
+
+						@Override
+						protected boolean getConfiguredGridUseUiWidth() {
+							return true;
+						}
+
+						@Override
+						protected String getConfiguredKeyStroke() {
+							return KeyStroke.ENTER;
+						}
 					}
-					
-					@Override
-					protected boolean getConfiguredGridUseUiWidth() {
-						return true;
+
+					@Order(4000.0)
+					public class ResetButton extends AbstractButton {
+						@Override
+						protected String getConfiguredLabel() {
+							return "Reset";
+						}
+
+						@Override
+						protected void execClickAction() {
+							BEANS.get(IClusterMessageDistributionService.class).clear();
+							getMessageField().setValue(null);
+						}
+
+						@Override
+						protected boolean getConfiguredProcessButton() {
+							return false;
+						}
+
+						@Override
+						protected boolean getConfiguredGridUseUiWidth() {
+							return true;
+						}
 					}
-					
-					@Override
-					protected String getConfiguredKeyStroke() {
-						return KeyStroke.ENTER;
-					}
-				}
-				
-				@Order(4000.0)
-				public class ResetButton extends AbstractButton {
-					@Override
-					protected String getConfiguredLabel() {
-						return "Reset";
-					}
-					
-					@Override
-					protected void execClickAction() {
-						BEANS.get(IClusterMessageDistributionService.class).clear();
-						getMessageField().setValue(null);
-					}
-					
-					@Override
-					protected boolean getConfiguredProcessButton() {
-						return false;
-					}
-					
-					@Override
-					protected boolean getConfiguredGridUseUiWidth() {
-						return true;
-					}
+
 				}
 
-					}
-					
-				
 			}
 
 		}
 
 		public class OkButton extends AbstractOkButton {
-			
-			  @Override
-			  protected String getConfiguredKeyStroke() {
-			    return null;
-			  }
-			
+
+			@Override
+			protected String getConfiguredKeyStroke() {
+				return null;
+			}
+
+			@Override
+			protected void execClickAction() {
+				// nop
+			}
 		}
 	}
-	
+
 	public class ViewHandler extends AbstractFormHandler {
 
 		@Override

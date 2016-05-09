@@ -4,7 +4,6 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.scout.myapp.client.ClientSession;
 import org.eclipse.scout.myapp.shared.cluster.ClusterMessage;
-import org.eclipse.scout.rt.client.IClientSession;
 import org.eclipse.scout.rt.client.context.ClientRunContexts;
 import org.eclipse.scout.rt.client.job.ModelJobs;
 import org.eclipse.scout.rt.client.ui.desktop.IDesktop;
@@ -18,15 +17,9 @@ import org.eclipse.scout.rt.shared.notification.INotificationHandler;
  */
 public class ClusterMessageClientNotificationHandler implements INotificationHandler<ClusterMessage> {
 
-	private IClientSession session;
-	
-	public void putSessionContext(IClientSession session) {
-		this.session = session;
-	}
-	
 	@Override
 	public void handleNotification(final ClusterMessage notification) {
-		//System.out.println(notification.getStatus().getMessage());
+		//System.out.println("handleNotification(...)");
 		ModelJobs.schedule(new Callable<ClusterMessage>() {
 
 			@Override
@@ -35,7 +28,7 @@ public class ClusterMessageClientNotificationHandler implements INotificationHan
 				return notification;
 			}
 
-		}, ModelJobs.newInput(ClientRunContexts.copyCurrent().withSession(session, true)));
+		}, ModelJobs.newInput(ClientRunContexts.copyCurrent()));
 	}
 
 	private void updateForm(ClusterMessage notification) {
@@ -63,6 +56,12 @@ public class ClusterMessageClientNotificationHandler implements INotificationHan
 			ConversationForm form = desktop.findForm(ConversationForm.class);
 			if (form != null) {
 				return form;
+			}
+			else {
+				// Show form
+				ConversationForm f = new ConversationForm();
+				f.start();
+				return f;
 			}
 		}
 		return null;
