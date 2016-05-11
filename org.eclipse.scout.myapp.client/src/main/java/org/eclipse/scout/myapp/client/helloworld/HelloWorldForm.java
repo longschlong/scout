@@ -1,5 +1,8 @@
 package org.eclipse.scout.myapp.client.helloworld;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm.MainBox.TopBox;
 import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm.MainBox.TopBox.InputField;
 import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm.MainBox.TopBox.MessageField;
@@ -8,14 +11,18 @@ import org.eclipse.scout.myapp.shared.helloworld.HelloWorldLookupCall;
 import org.eclipse.scout.myapp.shared.helloworld.IHelloWorldFormService;
 import org.eclipse.scout.myapp.shared.helloworld.MyStringCodeType;
 import org.eclipse.scout.rt.client.dto.FormData;
+import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
+import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractBooleanColumn;
 import org.eclipse.scout.rt.client.ui.form.AbstractForm;
 import org.eclipse.scout.rt.client.ui.form.AbstractFormHandler;
+import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
 import org.eclipse.scout.rt.client.ui.form.fields.listbox.AbstractListBox;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.platform.exception.ProcessingException;
+import org.eclipse.scout.rt.platform.util.CollectionUtility;
 import org.eclipse.scout.rt.shared.AbstractIcons;
 import org.eclipse.scout.rt.shared.TEXTS;
 import org.eclipse.scout.rt.shared.services.common.code.ICodeType;
@@ -153,7 +160,69 @@ public class HelloWorldForm extends AbstractForm {
 				protected Class<? extends ICodeType<?, String>> getConfiguredCodeType() {
 					return MyStringCodeType.class;
 				}
+				
+				public class MySingleSelectionListBoxTable extends DefaultListBoxTable {
+					
+					@Override
+					protected Class<? extends AbstractBooleanColumn> getConfiguredCheckableColumn() {
+						return org.eclipse.scout.rt.client.ui.form.fields.listbox.AbstractListBox.DefaultListBoxTable.ActiveColumn.class;
+					}
+
+					@Override
+					protected void execRowsChecked(Collection<? extends ITableRow> rows) {
+						setValueChangeTriggerEnabled(false);
+						if (rows == null || rows.size() == 0) {
+							// nop
+						} else {
+							// 1. Check, if the 'Unknown' row was found in selection
+							ITableRow unknownRow = null;
+							for (ITableRow r : rows) {
+								if (MyStringCodeType.UnknownCode.ID.equals(getKeyColumn().getValue(r))) {
+									unknownRow = r;
+									break;
+								}
+							}
+							
+							// 2. Check, if found, if selected
+							boolean unknownSelected = unknownRow != null && unknownRow.isChecked();
+
+							// 3. Uncheck all other rows
+							if (unknownSelected) {
+								List<ITableRow> allRows = getCheckedRows();
+								allRows.remove(unknownRow);
+								for (ITableRow tableRow : allRows) {
+									getCheckableColumn().setValue(tableRow, false);
+									tableRow.setChecked(false);
+								}
+							} else {
+								// If 'Unknown' is selected but any other row gets checked -> uncheck 'Unknown' row
+								if (CollectionUtility.firstElement(rows).isChecked()) {
+									List<ITableRow> allRows = getCheckedRows();
+									for (ITableRow tableRow : allRows) {
+										if (MyStringCodeType.UnknownCode.ID.equals(getKeyColumn().getValue(tableRow))) {
+											getCheckableColumn().setValue(tableRow, false);
+											tableRow.setChecked(false);
+											break;
+										}
+									}
+								}
+							}
+						}
+						setValueChangeTriggerEnabled(true);
+					}
+				}
 			}
+		}
+		
+		public class OkButton extends AbstractOkButton {
+			
+			@Override
+			protected void execClickAction() {
+				HelloWorldFormData fd = new HelloWorldFormData();
+				exportFormData(fd);
+				System.out.println(fd.getStringListBox().getValue());
+			}
+			
 		}
 	}
 

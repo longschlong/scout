@@ -33,4 +33,58 @@ public class MyStringCodeType extends AbstractCodeType<String, String> {
 			return ID;
 		}
 	}
+
+	@Order(20.0)
+	public static class BlueCode extends AbstractCode<String> {
+		
+		private static final long serialVersionUID = 2584415366784937361L;
+		
+		public static final String ID = "Blue";
+		
+		@Override
+		protected String getConfiguredText() {
+			return "Blue";
+		}
+		
+		@Override
+		public String getId() {
+			return ID;
+		}
+	}
+	
+	@Order(30.0)
+	public static class BlackCode extends AbstractCode<String> {
+		
+		private static final long serialVersionUID = 671381503916985066L;
+		
+		public static final String ID = "Black";
+		
+		@Override
+		protected String getConfiguredText() {
+			return "Black";
+		}
+		
+		@Override
+		public String getId() {
+			return ID;
+		}
+	}
+	
+	@Order(30.0)
+	public static class GreenCode extends AbstractCode<String> {
+		
+		private static final long serialVersionUID = -2911995505164111572L;
+		
+		public static final String ID = "Green";
+		
+		@Override
+		protected String getConfiguredText() {
+			return "Green";
+		}
+		
+		@Override
+		public String getId() {
+			return ID;
+		}
+	}
 }
