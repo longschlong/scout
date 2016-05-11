@@ -226,6 +226,21 @@ public class ConversationForm extends AbstractForm {
 						protected boolean getConfiguredMultilineText() {
 							return false;
 						}
+						
+						@Override
+						protected boolean getConfiguredUpdateDisplayTextOnModify() {
+							return true;
+						}
+						
+						@Override
+						protected void execChangedDisplayText() {
+							if (StringUtility.hasText(getDisplayText())) {
+								getSendButton().setEnabled(true);
+							}
+							else {
+								getSendButton().setEnabled(false);
+							}
+						}
 					}
 
 					@Order(3000.0)
@@ -259,6 +274,7 @@ public class ConversationForm extends AbstractForm {
 						protected String getConfiguredKeyStroke() {
 							return KeyStroke.ENTER;
 						}
+						
 					}
 
 					@Order(4000.0)
@@ -270,8 +286,7 @@ public class ConversationForm extends AbstractForm {
 
 						@Override
 						protected void execClickAction() {
-							BEANS.get(IClusterMessageDistributionService.class).clear();
-							getMessageField().setValue(null);
+							getConversationField().setValue(null);
 						}
 
 						@Override

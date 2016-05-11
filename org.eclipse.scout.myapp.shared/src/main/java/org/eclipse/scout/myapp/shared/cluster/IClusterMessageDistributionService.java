@@ -8,5 +8,4 @@ public interface IClusterMessageDistributionService extends IService {
 
 	void sendMessage(ClusterMessage message);
 	
-	void clear();
 }

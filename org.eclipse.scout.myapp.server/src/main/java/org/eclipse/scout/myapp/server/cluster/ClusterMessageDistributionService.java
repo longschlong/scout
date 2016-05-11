@@ -16,7 +16,7 @@ public class ClusterMessageDistributionService implements IClusterMessageDistrib
 		if (message == null) {
 			return;
 		}
-		publishToClients(message);
+		notifyClients(message);
 		notifyServers();
 	}
 
@@ -24,12 +24,7 @@ public class ClusterMessageDistributionService implements IClusterMessageDistrib
 		BEANS.get(ClusterSynchronizationService.class).publish(new ServerMessage("Chat message from " + BEANS.get(ClusterSynchronizationService.class).getNodeId()));	// Send only to (other) server nodes!
 	}
 
-	@Override
-	public void clear() {
-		publishToClients(new ClusterMessage(true));
-	}
-
-	protected void publishToClients(ClusterMessage message) {
+	protected void notifyClients(ClusterMessage message) {
 		BEANS.get(ClientNotificationRegistry.class).putForAllSessions(message /*, true*//*distributeOverCluster*/);	// Client notifications are sent over cluster sync
 	}
 }
