@@ -105,9 +105,19 @@ public class HelloWorldForm extends AbstractForm {
 					return TEXTS.get("Message");
 				}
 
+//				@Override
+//				protected boolean getConfiguredMandatory() {
+//					return true;
+//				}
+				
+//				@Override
+//				protected boolean execIsEmpty() {
+//					return false;
+//				} 
+				
 				@Override
 				protected boolean getConfiguredEnabled() {
-					return false;
+					return true;
 				}
 			}
 
@@ -170,45 +180,45 @@ public class HelloWorldForm extends AbstractForm {
 
 					@Override
 					protected void execRowsChecked(Collection<? extends ITableRow> rows) {
-						setValueChangeTriggerEnabled(false);
 						if (rows == null || rows.size() == 0) {
-							// nop
-						} else {
-							// 1. Check, if the 'Unknown' row was found in selection
-							ITableRow unknownRow = null;
-							for (ITableRow r : rows) {
-								if (MyStringCodeType.UnknownCode.ID.equals(getKeyColumn().getValue(r))) {
-									unknownRow = r;
-									break;
-								}
-							}
-							
-							// 2. Check, if found, if selected
-							boolean unknownSelected = unknownRow != null && unknownRow.isChecked();
+							return;
+						}
+						// 1. Check, if the 'Unknown' row was found in selection
+						/*
+						 * As long as we do not use (un)checkRows(...), the collection should have only one element in it.
+						 * Therefore, check if we could easily use first element of collection
+						 */
+						ITableRow unknownRow = null;
+						ITableRow r = CollectionUtility.firstElement(rows);
+						if (MyStringCodeType.UnknownCode.ID.equals(getKeyColumn().getValue(r))) {
+							unknownRow = r;
+						}
 
-							// 3. Uncheck all other rows
-							if (unknownSelected) {
+						// 2. Check, if found, if selected
+						boolean unknownSelected = unknownRow != null && unknownRow.isChecked();
+
+						// 3. Uncheck all other rows
+						if (unknownSelected) {
+							List<ITableRow> allRows = getCheckedRows();
+							allRows.remove(unknownRow);
+							for (ITableRow tableRow : allRows) {
+								getCheckableColumn().setValue(tableRow, false);
+								tableRow.setChecked(false);
+							}
+						} else {
+							// If 'Unknown' is selected but any other row gets
+							// checked -> uncheck 'Unknown' row
+							if (CollectionUtility.firstElement(rows).isChecked()) {
 								List<ITableRow> allRows = getCheckedRows();
-								allRows.remove(unknownRow);
 								for (ITableRow tableRow : allRows) {
-									getCheckableColumn().setValue(tableRow, false);
-									tableRow.setChecked(false);
-								}
-							} else {
-								// If 'Unknown' is selected but any other row gets checked -> uncheck 'Unknown' row
-								if (CollectionUtility.firstElement(rows).isChecked()) {
-									List<ITableRow> allRows = getCheckedRows();
-									for (ITableRow tableRow : allRows) {
-										if (MyStringCodeType.UnknownCode.ID.equals(getKeyColumn().getValue(tableRow))) {
-											getCheckableColumn().setValue(tableRow, false);
-											tableRow.setChecked(false);
-											break;
-										}
+									if (MyStringCodeType.UnknownCode.ID.equals(getKeyColumn().getValue(tableRow))) {
+										getCheckableColumn().setValue(tableRow, false);
+										tableRow.setChecked(false);
+										break;
 									}
 								}
 							}
 						}
-						setValueChangeTriggerEnabled(true);
 					}
 				}
 			}
