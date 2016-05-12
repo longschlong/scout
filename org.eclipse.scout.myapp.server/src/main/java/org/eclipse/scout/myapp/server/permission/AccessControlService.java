@@ -5,7 +5,7 @@ import java.security.Permissions;
 
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.shared.security.RemoteServiceAccessPermission;
-import org.eclipse.scout.rt.shared.services.common.security.UserIdAccessControlService;
+import org.eclipse.scout.rt.shared.services.common.security.AbstractAccessControlService;
 
 /**
  * <h3>{@link AccessControlService}</h3>
@@ -13,7 +13,7 @@ import org.eclipse.scout.rt.shared.services.common.security.UserIdAccessControlS
  * @author mlu
  */
 @Order(-1)
-public class AccessControlService extends UserIdAccessControlService {
+public class AccessControlService extends AbstractAccessControlService<String> {
   @Override
   protected Permissions execLoadPermissions(String userId) {
     Permissions permissions = new Permissions();
@@ -22,4 +22,9 @@ public class AccessControlService extends UserIdAccessControlService {
     permissions.add(new AllPermission());
     return permissions;
   }
+
+	@Override
+	protected String getCurrentUserCacheKey() {
+		return getUserIdOfCurrentUser();
+	}
 }

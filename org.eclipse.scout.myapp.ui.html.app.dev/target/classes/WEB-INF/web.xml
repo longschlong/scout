@@ -9,7 +9,6 @@
 
   <!-- Platform Startup listener -->
   <listener>
-    <!--<listener-class>org.eclipse.scout.rt.server.commons.WebappEventListener</listener-class>-->
     <listener-class>org.eclipse.scout.rt.ui.html.UiHttpSessionListener</listener-class>
   </listener>
 
@@ -45,5 +44,5 @@
     <!-- Session timeout in minutes -->
     <session-timeout>60</session-timeout>
   </session-config>
-
+	
 </web-app>
