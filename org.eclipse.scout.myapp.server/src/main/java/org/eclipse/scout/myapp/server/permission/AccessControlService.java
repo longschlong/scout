@@ -12,7 +12,7 @@ import org.eclipse.scout.rt.shared.services.common.security.AbstractAccessContro
  *
  * @author mlu
  */
-@Order(-1)
+@Order(1)
 public class AccessControlService extends AbstractAccessControlService<String> {
   @Override
   protected Permissions execLoadPermissions(String userId) {
