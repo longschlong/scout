@@ -112,9 +112,9 @@ public class TestForm extends AbstractForm {
 						if (i % 3 == 0) {
 							fields.addLast(createTestStringField(label, tooltip));
 						} else if (i % 3 == 1) {
-							fields.addLast(createTestDateTimeField(label, tooltip));
+							fields.addLast(createTestStringField(label, tooltip));
 						} else {
-							fields.addLast(createTestSmartField(label, tooltip));
+							fields.addLast(createTestStringField(label, tooltip));
 						}
 					}
 				}
@@ -147,9 +147,9 @@ public class TestForm extends AbstractForm {
 						if (i % 3 == 0) {
 							fields.addLast(createTestStringField(label, tooltip));
 						} else if (i % 3 == 1) {
-							fields.addLast(createTestDateTimeField(label, tooltip));
+							fields.addLast(createTestStringField(label, tooltip));
 						} else {
-							fields.addLast(createTestSmartField(label, tooltip));
+							fields.addLast(createTestStringField(label, tooltip));
 						}
 					}
 				}

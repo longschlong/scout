@@ -7,6 +7,7 @@ import org.eclipse.scout.rt.client.IClientSession;
 import org.eclipse.scout.rt.client.services.common.bookmark.IBookmarkService;
 import org.eclipse.scout.rt.client.session.ClientSessionProvider;
 import org.eclipse.scout.rt.platform.BEANS;
+import org.eclipse.scout.rt.shared.extension.ExtensionRegistry;
 import org.eclipse.scout.rt.shared.services.common.code.CODES;
 
 /**
@@ -35,6 +36,7 @@ public class ClientSession extends AbstractClientSession {
 
     setDesktop(new Desktop());
     BEANS.get(IBookmarkService.class).loadBookmarks();
+//    BEANS.get(ExtensionRegistry.class).register(AbstractGenericExtension.class);
   }
   
   
