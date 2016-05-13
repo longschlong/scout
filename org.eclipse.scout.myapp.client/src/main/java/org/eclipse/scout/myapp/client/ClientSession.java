@@ -7,7 +7,6 @@ import org.eclipse.scout.rt.client.IClientSession;
 import org.eclipse.scout.rt.client.services.common.bookmark.IBookmarkService;
 import org.eclipse.scout.rt.client.session.ClientSessionProvider;
 import org.eclipse.scout.rt.platform.BEANS;
-import org.eclipse.scout.rt.shared.extension.ExtensionRegistry;
 import org.eclipse.scout.rt.shared.services.common.code.CODES;
 
 /**

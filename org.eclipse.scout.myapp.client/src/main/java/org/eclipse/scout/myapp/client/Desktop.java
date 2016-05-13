@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.scout.myapp.client.bookmark.MyBookmarkMenu;
 import org.eclipse.scout.myapp.client.cluster.ConversationForm;
 import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm;
+import org.eclipse.scout.myapp.client.helloworld.HelloWorldForm2;
 import org.eclipse.scout.myapp.client.helloworld.color.ColorOutline;
 import org.eclipse.scout.myapp.client.search.SearchOutline;
 import org.eclipse.scout.myapp.client.settings.SettingsOutline;
@@ -113,6 +114,20 @@ public class Desktop extends AbstractDesktop {
 			@Override
 			protected void execAction() {
 				new HelloWorldForm().startNew();
+			}
+		}
+		
+		@Order(1105.0)
+		public class StartHelloWorldForm2 extends AbstractMenu {
+			
+			@Override
+			protected String getConfiguredText() {
+				return "Start HelloWorldForm2";
+			}
+			
+			@Override
+			protected void execAction() {
+				new HelloWorldForm2().startNew();
 			}
 		}
 		

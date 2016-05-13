@@ -1,6 +1,7 @@
 package org.eclipse.scout.myapp.client.helloworld.color;
 
 import java.awt.Color;
+import java.util.Collections;
 
 import org.eclipse.scout.myapp.client.helloworld.color.ColorSearchForm.MainBox.SimpleBox;
 import org.eclipse.scout.myapp.client.helloworld.color.ColorSearchForm.MainBox.SimpleBox.SimpleGroupBox;
@@ -11,6 +12,7 @@ import org.eclipse.scout.myapp.client.helloworld.color.ColorSearchForm.MainBox.S
 import org.eclipse.scout.myapp.shared.helloworld.color.ColorCodeType;
 import org.eclipse.scout.myapp.shared.helloworld.color.ColorSearchFormData;
 import org.eclipse.scout.myapp.shared.helloworld.color.OperatorCodeType;
+import org.eclipse.scout.myapp.shared.helloworld.color.OperatorLookupCall;
 import org.eclipse.scout.rt.client.dto.FormData;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractSearchForm;
 import org.eclipse.scout.rt.client.ui.form.AbstractFormHandler;
@@ -27,6 +29,7 @@ import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.shared.AbstractIcons;
 import org.eclipse.scout.rt.shared.services.common.code.ICodeType;
 import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
+import org.eclipse.scout.rt.shared.services.lookup.ILookupCall;
 
 /**
  * <h3>{@link ColorSearchForm}</h3>
@@ -137,7 +140,7 @@ public class ColorSearchForm extends AbstractSearchForm {
 						return ColorCodeType.class;
 					}
 
-					@Override
+					@Override	
 					protected String execFormatValue(Color value) {
 						if (value == null) {
 							return super.execFormatValue(value);
@@ -172,8 +175,8 @@ public class ColorSearchForm extends AbstractSearchForm {
 						}
 
 						@Override
-						protected Class<? extends ICodeType<?, String>> getConfiguredCodeType() {
-							return OperatorCodeType.class;
+						protected Class<? extends ILookupCall<String>> getConfiguredLookupCall() {
+							return OperatorLookupCall.class;
 						}
 						
 						@Override
@@ -183,6 +186,14 @@ public class ColorSearchForm extends AbstractSearchForm {
 							}
 							else {
 								getFieldByClass(RedValueField.class).setMandatory(false);
+							}
+						}
+						@Override
+						protected void execPrepareLookup(ILookupCall<String> call) {
+							super.execPrepareLookup(call);
+							if (call instanceof OperatorLookupCall) {
+								OperatorLookupCall c = (OperatorLookupCall) call;
+								c.setDisabledElements(Collections.singletonList(OperatorCodeType.EqualsCode.ID));
 							}
 						}
 					}
